@@ -5,12 +5,8 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import data from '../data.json'
 import dateFormat from 'dateformat'
-// import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Stack from '@mui/material/Stack';
-import { margin } from '@mui/system';
 import { useState } from 'react';
 import { Link } from 'react-router-dom'
 import { show_all_robots } from '../redux/action'
@@ -42,7 +38,7 @@ export default function ResponsiveGrid() {
     useEffect(() => {
         dispatch(show_all_robots(DATA))
     }, [])
-    console.log(rdx_data)
+    // console.log(rdx_data)
 
 
     return (

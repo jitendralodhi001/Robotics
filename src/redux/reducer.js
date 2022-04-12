@@ -1,4 +1,4 @@
-const initial_state = {robots:[],counter:0}
+const initial_state = {robots:[],counter:0,cartItem:[],material:[]}
 
 export const Reducer = (state=initial_state , action)=>{
     // debugger
@@ -9,19 +9,34 @@ export const Reducer = (state=initial_state , action)=>{
                     ...state,
                     robots:action.payload
                 })
-            case 'search_material':{
+            case 'search_material':
                 return({
                     ...state,
                     robots:action.payload
                 })
-            }
+            
             case 'count':
                 return ({
                     ...state,
-                    counter:action.payload
+                    counter:state.counter +1
 
                 })
-
+            case 'cart_items':
+                return({
+                    ...state,
+                    cartItem:[...state.cartItem,action.payload]
+                })
+                
+            case 'removeitem':
+                return({
+                    ...state,
+                    cartItem:[action.payload]
+                })
+            case  'material':
+                return ({
+                    ...state,
+                    material:[...state.material, action.payload]
+                })
             default : return (initial_state)
         }
 

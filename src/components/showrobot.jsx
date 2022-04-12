@@ -22,8 +22,10 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom'
-import { show_all_robots } from '../redux/action'
+import { show_all_robots, cart_items, materials, count_val ,remove_cartItems} from '../redux/action'
 import { useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
+import { SelectUnstyledContext } from '@mui/base';
 const DATA = data.data
 // console.log(DATA);
 
@@ -41,36 +43,84 @@ const ExpandMore = styled((props) => {
 const Showrobot = () => {
     const dispatch = useDispatch()
     const rdx_data = useSelector(state => state)
-
-    // dispatch(show_all_robots(DATA))
-    // console.log(rdx_data)
-
+    const cartitems = useSelector(state => state.cartItem)
+    const robo_material = useSelector(state => state.material)
     const [expanded, setExpanded] = React.useState(false);
     const { id } = useParams()
     const [count, setCount] = useState(0)
     const [view, setView] = useState('')
-    const selected_robot = (DATA[id])
+    const [nvigate, setNavigate] = useState()
 
+    const selected_robot = (DATA[id])
+    const Plus = () => {
+        setCount(count + 1)
+        console.log("length of array")
+        if (selected_robot.stock !=0 && count!= selected_robot.stock )
+        {
+            if (robo_material.length<=4)
+            {
+                dispatch(cart_items(selected_robot))
+                dispatch (count_val(count))
+            }
+            else{
+                alert("cannot add more than 5 items")
+            }
+       
+        }
+        else{
+            alert("Product is out of stock ")
+        }
+       
+    }
+    const Minus = () => {
+        if (count>1)
+        {
+            setCount(count - 1)
+            // dispatch(remove_cartItems(removeItem))
+        }
+       
+    }
+    const buy_robot = () => {
+        dispatch(materials(selected_robot.material))
+        setNavigate(true)
+    }
     const show = (e) => {
-        if (selected_robot.stock == 0){
+        if (selected_robot.stock == 0) {
             alert("This product is out of stock ")
             setView('')
-        } 
-        else {
-            setView(true)  
         }
-        
+        else {
+            setView(true)
+
+            // robo_material.map((item)=>{
+            //     // console.log(item) 
+            //     if(item!=selected_robot.material)
+            //     {
+            // dispatch (cart_items(selected_robot))
+            //  dispatch(materials(selected_robot.material))
+
+            //     }
+
+            // })
+
+
+
+        }
+
     }
+
+    console.log(robo_material)
+    console.log(cartitems)
+
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
+        setView('')
     };
-
-    
-    // console.log(selected_robot)
-
     return (
+
         <Card sx={{ maxWidth: 345 }} style={{ margin: "auto", marginTop: "50px" }} >
+            {nvigate && <Navigate to={`/cart/${id}/${count}`} />}
             <CardHeader
                 avatar={
                     <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -123,20 +173,11 @@ const Showrobot = () => {
                     </Typography>
                     <Typography paragraph>
                         Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over
-                        medium-high heat. Add chicken, shrimp and chorizo, and cook, stirring
-                        occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp to a
-                        large plate and set aside, leaving chicken and chorizo in the pan. Add
-                        pimentón, bay leaves, garlic, tomatoes, onion, salt and pepper, and cook,
-                        stirring often until thickened and fragrant, about 10 minutes. Add
-                        saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
+                        .
                     </Typography>
                     <Typography paragraph>
                         Add rice and stir very gently to distribute. Top with artichokes and
-                        peppers, and cook without stirring, until most of the liquid is absorbed,
-                        15 to 18 minutes. Reduce heat to medium-low, add reserved shrimp and
-                        mussels, tucking them down into the rice, and cook again without
-                        stirring, until mussels have opened and rice is just tender, 5 to 7
-                        minutes more. (Discard any mussels that don’t open.)
+
                     </Typography>
                     <Typography>
                         Set aside off of the heat to let rest for 10 minutes, and then serve.
@@ -147,16 +188,19 @@ const Showrobot = () => {
 
 
             <label htmlFor="icon-button-file" style={{ margin: "auto", marginBottom: "20px" }} >
-                {view  ? <div> 
-                    <Button variant="contained" onClick={() => { setCount(count - 1) }}>-</Button>
+                {view ? <div>
+                    <Button variant="contained" onClick={Minus}>-</Button>
                     <span style={{ margin: "3px 3px 3px 3px" }}> {count} </span>
-                    <Button variant="contained" onClick={() => { setCount(count + 1) }} >+</Button>
-                    <Link to={`/cart/${id}/${count}`}  style={{ textDecoration: 'none' }} >
-                {selected_robot.stock == 0  ? 
-                <div> out of stock...!</div> : 
-                     <Button variant="contained" color="success" style={{ margin: "4px 4px 4px 4px" }} >Buy</Button>} </Link> 
-                     </div> : ''}
+                    <Button variant="contained" onClick={Plus} >+ </Button>
+
+                    {/* <Link to={`/cart/${id}/${count}`} style={{ textDecoration: 'none' }} > */}
+                    {selected_robot.stock == 0 ?
+                        <div> out of stock...!</div> :
+                        <Button variant="contained" color="success" style={{ margin: "4px 4px 4px 4px" }} onClick={buy_robot}>Buy</Button>}
+                    {/* </Link> */}
+                </div> : ''}
                 {!view && <Button variant="contained" color="success" style={{ margin: "4px 4px 4px 4px" }} onClick={show} > Add to cart </Button>}
+                {/* <Button variant="contained" color="success" style={{ margin: "4px 4px 4px 4px" }} onClick={show} > Add to cart </Button> */}
 
             </label>
         </Card>
