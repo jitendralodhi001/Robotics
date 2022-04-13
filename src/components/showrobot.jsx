@@ -21,14 +21,10 @@ import dateFormat from 'dateformat';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom'
-import { show_all_robots, cart_items, materials, count_val ,remove_cartItems} from '../redux/action'
-import { useEffect } from 'react';
+import {cart_items, materials, count_valPlus ,count_valMinus} from '../redux/action'
 import { Navigate } from 'react-router-dom';
-import { SelectUnstyledContext } from '@mui/base';
-const DATA = data.data
-// console.log(DATA);
 
+const DATA = data.data
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
     return <IconButton {...other} />;
@@ -42,7 +38,6 @@ const ExpandMore = styled((props) => {
 
 const Showrobot = () => {
     const dispatch = useDispatch()
-    const rdx_data = useSelector(state => state)
     const cartitems = useSelector(state => state.cartItem)
     const robo_material = useSelector(state => state.material)
     const [expanded, setExpanded] = React.useState(false);
@@ -52,6 +47,7 @@ const Showrobot = () => {
     const [nvigate, setNavigate] = useState()
 
     const selected_robot = (DATA[id])
+
     const Plus = () => {
         setCount(count + 1)
         console.log("length of array")
@@ -60,30 +56,28 @@ const Showrobot = () => {
             if (robo_material.length<=4)
             {
                 dispatch(cart_items(selected_robot))
-                dispatch (count_val(count))
+                dispatch (count_valPlus())
             }
             else{
                 alert("cannot add more than 5 items")
             }
-       
         }
         else{
             alert("Product is out of stock ")
         }
-       
     }
     const Minus = () => {
         if (count>1)
         {
             setCount(count - 1)
-            // dispatch(remove_cartItems(removeItem))
+            dispatch(count_valMinus())
         }
-       
     }
     const buy_robot = () => {
         dispatch(materials(selected_robot.material))
         setNavigate(true)
     }
+    
     const show = (e) => {
         if (selected_robot.stock == 0) {
             alert("This product is out of stock ")
@@ -91,22 +85,7 @@ const Showrobot = () => {
         }
         else {
             setView(true)
-
-            // robo_material.map((item)=>{
-            //     // console.log(item) 
-            //     if(item!=selected_robot.material)
-            //     {
-            // dispatch (cart_items(selected_robot))
-            //  dispatch(materials(selected_robot.material))
-
-            //     }
-
-            // })
-
-
-
         }
-
     }
 
     console.log(robo_material)

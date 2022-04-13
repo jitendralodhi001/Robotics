@@ -13,12 +13,20 @@ export const material_type = (data)=>{
     })
 }
 
-export const count_val = (data)=>{
+export const count_valPlus = (data)=>{
     return ({
-        type:'count',
+        type:'count+',
         payload:data
     })
 }
+
+export const count_valMinus = (data)=>{
+    return ({
+        type:'count-',
+        payload:data
+    })
+}
+
 
 export const cart_items = (data)=>{
     return({ 
@@ -40,3 +48,10 @@ export const materials = (data)=>{
         payload:data
     })
 }
+
+// export const same_type_cart = (data)=>{
+//     return ({
+//         type:'sameTypeRobot',
+//         payload:data
+//     })
+// }
