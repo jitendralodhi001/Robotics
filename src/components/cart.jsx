@@ -1,7 +1,6 @@
-import * as React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import data from '../data.json'
-import dateFormat from 'dateformat';
+import Button from '@mui/material/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -11,6 +10,9 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
+import { clear_cart } from '../redux/action';
+import { cart_item_plus, cart_item_minus } from '../redux/action'
+
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -27,30 +29,59 @@ const DATA = data.data
 export default function RecipeReviewCard() {
   const dispatch = useDispatch()
   const cartitems = useSelector(state => state.cartItem)
-  // const robo_material = useSelector(state => state.material)
   const same_type_robot = useSelector(state => state.sameRobot)
-
-  const { id } = useParams()
-  let count = 0;
-  const selected_robot = DATA[id]
-  const [total , setTotal]=React.useState(0)
-
-  // var totalamount = data.map((items) => items.count * items.price )
-  // console.log(totalamount)
-  
+  const [data, setData] = useState([])
+  const [val, setVal]=useState('0')
 
 
-  // logic for carts items 
-  const data = [...cartitems.reduce((mp, o) => {
-    if (!mp.has(o.material)) mp.set(o.material, { ...o, count: 0 });
-    mp.get(o.material).count++;
-    return mp;
-  }, new Map).values()];
-  console.log(data)
+  const getCount = () => {
+    let count = 0
+    let countData = [...cartitems.reduce((mp, o) => {
+      if (!mp.has(o.material)) mp.set(o.material, { ...o, count: 0 });
+      mp.get(o.material).count++;
+      return mp;
+    }, new Map).values()];
+    return countData
+  }
+
+  useEffect(() => {
+    const datas = getCount()
+    setData(datas)
+    console.log("effff", data)
+  },[val,cartitems])
+
+  // console.log(data)
+  // adding total price of all product in carts
+  const addprice = data.map((items) => items.count * items.price)
+  var totalamount = 0
+  for (let i = 0; i < addprice.length; i++) {
+    totalamount = totalamount + addprice[i]
+  }
+  var thai = new Intl.NumberFormat('th', { style: 'currency', currency: 'THB' }).format(totalamount).replace(/\b(\w*THB\w*)\b/, '฿ ')
+  // console.log(thai)
+
+  const Plus = (name) => {
+    const filtered = cartitems.filter((items) => items.name == name)
+    console.log(filtered[0])
+    dispatch(cart_item_plus(filtered[0]))
+    setVal(val+1)
+    // console.log(cartitems)
+  }
+
+  const Minus = (name) => {
+    const check = cartitems.filter((items)=> items === name)
+    if (check)
+    {
+      cartitems.shift()
+      dispatch(cart_item_minus(cartitems))
+      setVal(val+1)
+    }
+  }
+  console.log("cartitems", cartitems)
+
 
   return (
     <>
-      {console.log(same_type_robot)}
 
       <Box sx={{ flexGrow: 1, overflow: 'hidden', px: 3 }}>
         <StyledPaper
@@ -62,7 +93,7 @@ export default function RecipeReviewCard() {
         >
           <Grid container wrap="nowrap" spacing={2}>
             <Grid item xs zeroMinWidth>
-              <Typography style={{color:'black'}} noWrap>YOUR CART ITEMS </Typography>
+              <Typography style={{ color: 'black' }} noWrap>YOUR CART ITEMS </Typography>
             </Grid>
           </Grid>
         </StyledPaper>
@@ -85,11 +116,13 @@ export default function RecipeReviewCard() {
 
                   </Grid>
                   <Grid item xs zeroMinWidth>
-                    <Typography noWrap>Name : {items.name} <span style={{color:"blue"}}>  *  {items.count} </span></Typography>
+                    <Typography noWrap>Name : {items.name} <span style={{ color: "blue" }}>  *  {items.count} </span></Typography>
                     <Typography noWrap> Material : {items.material}</Typography>
-                    <Typography noWrap> price : Rs: <italic> {items.price}</italic>/-</Typography>
-                    <Typography noWrap> Item Total : Rs: <italic>  {items.price * items.count} </italic>/</Typography>
-                         
+                    <Typography noWrap> price : Rs: <italic> {new Intl.NumberFormat('th', { style: 'currency', currency: 'THB' }).format(items.price).replace(/\b(\w*THB\w*)\b/, '฿ ')}</italic>/-</Typography>
+                    <Typography noWrap> Item Total : Rs: <italic> {new Intl.NumberFormat('th', { style: 'currency', currency: 'THB' }).format(items.price * items.count).replace(/\b(\w*THB\w*)\b/, '฿ ')}</italic>/-</Typography>
+                    <Button variant="contained" onClick={() => { Minus(items.name) }}>-</Button>
+                    <span style={{ margin: "3px 3px 3px 3px" }}> {items.count} </span>
+                    <Button variant="contained" onClick={() => { Plus(items.name) }} >+ </Button>
                   </Grid>
                 </Grid>
               </StyledPaper>
@@ -97,23 +130,28 @@ export default function RecipeReviewCard() {
           </>
         )
       })}
-      <Box sx={{ flexGrow: 1, overflow: 'hidden', px: 3 }}>
+
+
+      {cartitems.length < 0 ? '' : <Box sx={{ flexGrow: 1, overflow: 'hidden', px: 3 }}>
         <StyledPaper
           sx={{
             my: 1,
             mx: 'auto',
             p: 2,
           }}
-        >
-          <Grid container wrap="nowrap" spacing={2}>
+        ><Grid container wrap="nowrap" spacing={2}>
             <Grid item xs zeroMinWidth>
-              <Typography noWrap>Total Price : </Typography>
+              <Typography noWrap>Total Price : {thai}/- </Typography>
             </Grid>
+            <Grid item xs zeroMinWidth>
+              <Button variant="outlined" onClick={() => dispatch(clear_cart())} color="error">Clear Cart</Button>
+            </Grid>
+
           </Grid>
         </StyledPaper>
-      </Box>
+      </Box>}
 
-      {cartitems.length <= 0 ? <Stack sx={{ width: '100%', width: "80%", margin: "auto", marginTop: '50px' }} spacing={2}>
+      {data.length <= 0 ? <Stack sx={{ width: '100%', width: "80%", margin: "auto", marginTop: '50px' }} spacing={2}>
         <Alert severity="error">No Item in cart....! </Alert>
       </Stack> : ''}
 

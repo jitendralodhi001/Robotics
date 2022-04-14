@@ -1,7 +1,7 @@
-const initial_state = { robots: [], counter: 0, cartItem: [], material: [] ,sameRobot:[]}
+const initial_state = { robots: [], counter: 0, cartItem: [], material: [], sameRobot: [] }
 
 export const Reducer = (state = initial_state, action) => {
-    // debugger
+
     switch (action.type) {
         case 'showrobots':
             return ({
@@ -23,7 +23,7 @@ export const Reducer = (state = initial_state, action) => {
         case 'count-':
             return ({
                 ...state,
-                counter: state.counter -1
+                counter: state.counter - 1
 
             })
         case 'cart_items':
@@ -31,7 +31,12 @@ export const Reducer = (state = initial_state, action) => {
                 ...state,
                 cartItem: [...state.cartItem, action.payload]
             })
-
+        case 'clearcart':
+            return ({
+                ...state,
+                cartItem:[],
+                counter: 0
+            })
         case 'removeitem':
             return ({
                 ...state,
@@ -42,12 +47,19 @@ export const Reducer = (state = initial_state, action) => {
                 ...state,
                 material: [...state.material, action.payload]
             })
+        case 'cartitemplus':
+            return ({
+                ...state,
+                cartItem: [...state.cartItem, action.payload],
+                counter: state.counter + 1
 
-        // case 'sameTypeRobot':
-        //     return ({
-        //         ...state,
-        //         sameRobot:[...state.sameRobot, action.payload]
-        //     })
+            })
+        case 'cartitemminus':
+            return ({
+                ...state,
+                cartItem: action.payload,
+                counter: state.counter - 1
+            })
         default: return (initial_state)
     }
 

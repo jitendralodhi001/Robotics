@@ -49,11 +49,10 @@ const Showrobot = () => {
     const selected_robot = (DATA[id])
 
     const Plus = () => {
-        setCount(count + 1)
-        console.log("length of array")
         if (selected_robot.stock !=0 && count!= selected_robot.stock )
         {
-            if (robo_material.length<=4)
+            setCount(count + 1)
+            if (robo_material.length<=5)
             {
                 dispatch(cart_items(selected_robot))
                 dispatch (count_valPlus())
@@ -99,7 +98,7 @@ const Showrobot = () => {
     return (
 
         <Card sx={{ maxWidth: 345 }} style={{ margin: "auto", marginTop: "50px" }} >
-            {nvigate && <Navigate to={`/cart/${id}/${count}`} />}
+            {nvigate && <Navigate to={`/cart`} />}
             <CardHeader
                 avatar={
                     <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">

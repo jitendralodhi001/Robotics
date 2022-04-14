@@ -11,7 +11,7 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route exact path="/" element={<SpacingGrid />} />
-        <Route path="/cart/:id/:count" element={<RecipeReviewCard />} />
+        <Route path="/cart" element={<RecipeReviewCard />} />
         <Route path="/showrobot/:id" element={<Showrobot />} />
       </Routes>
     </BrowserRouter>

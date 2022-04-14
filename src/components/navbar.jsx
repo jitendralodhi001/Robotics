@@ -10,8 +10,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { useSelector, useDispatch } from 'react-redux';
 import { material_type, show_all_robots } from '../redux/action'
-import { useEffect } from 'react';
-import Button from '@mui/material/Button';
+import {Link} from 'react-router-dom'
 import data from '../data.json'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Badge from '@mui/material/Badge';
@@ -76,7 +75,7 @@ export default function Navbar() {
     }
   }
 
-  console.log(counter)
+
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -112,9 +111,11 @@ export default function Navbar() {
 
           </Search>
           <IconButton style={{ color: "white" }} badgeContent={4} aria-label="add to shopping cart">
+         <Link to="/cart"> 
           <Badge badgeContent={counter} style={{ color: "white" }} color="primary">
               <AddShoppingCartIcon style={{ color: "white" }} color="action" />
             </Badge>
+            </Link>
           </IconButton>
         </Toolbar>
       </AppBar>

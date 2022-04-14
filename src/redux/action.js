@@ -34,10 +34,9 @@ export const cart_items = (data)=>{
         payload:data
     })
 }
-
-export const remove_cartItems =  (data)=>{
+export const clear_cart = (data)=>{
     return ({
-        type:'removeitem',
+        type:'clearcart',
         payload:data
     })
 }
@@ -49,9 +48,16 @@ export const materials = (data)=>{
     })
 }
 
-// export const same_type_cart = (data)=>{
-//     return ({
-//         type:'sameTypeRobot',
-//         payload:data
-//     })
-// }
+export  const cart_item_plus =(data)=>{
+    return ({
+        type:'cartitemplus',
+        payload:data
+    })
+}
+
+export const cart_item_minus = (data)=>{
+    return ({
+        type:'cartitemminus',
+        payload:data
+    })
+}
