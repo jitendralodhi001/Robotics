@@ -14,6 +14,7 @@ import { clear_cart } from '../redux/action';
 import { cart_item_plus, cart_item_minus } from '../redux/action'
 
 
+
 const StyledPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -30,8 +31,9 @@ export default function RecipeReviewCard() {
   const dispatch = useDispatch()
   const cartitems = useSelector(state => state.cartItem)
   const same_type_robot = useSelector(state => state.sameRobot)
+  const robots = useSelector(state => state.robots)
   const [data, setData] = useState([])
-  const [val, setVal]=useState('0')
+  const [val, setVal] = useState('0')
 
 
   const getCount = () => {
@@ -48,7 +50,7 @@ export default function RecipeReviewCard() {
     const datas = getCount()
     setData(datas)
     console.log("effff", data)
-  },[val,cartitems])
+  }, [val, cartitems])
 
   // console.log(data)
   // adding total price of all product in carts
@@ -58,26 +60,34 @@ export default function RecipeReviewCard() {
     totalamount = totalamount + addprice[i]
   }
   var thai = new Intl.NumberFormat('th', { style: 'currency', currency: 'THB' }).format(totalamount).replace(/\b(\w*THB\w*)\b/, '฿ ')
-  // console.log(thai)
+
 
   const Plus = (name) => {
     const filtered = cartitems.filter((items) => items.name == name)
-    console.log(filtered[0])
-    dispatch(cart_item_plus(filtered[0]))
-    setVal(val+1)
-    // console.log(cartitems)
+    console.log(filtered[0].stock)
+    var check_stock = robots.filter((item) => item.name === name)
+    console.log(check_stock[0].stock)
+
+    var buy_count = data.filter((item) => item.name == name)
+    console.log(buy_count[0].count)
+    if (check_stock[0].stock !== buy_count[0].count) {
+      dispatch(cart_item_plus(filtered[0]))
+      setVal(val + 1)
+    }
+    else {
+      alert('out of stock ')
+    }
   }
 
   const Minus = (name) => {
-    const check = cartitems.filter((items)=> items === name)
-    if (check)
-    {
+    const check = cartitems.filter((items) => items === name)
+    if (check) {
       cartitems.shift()
       dispatch(cart_item_minus(cartitems))
-      setVal(val+1)
+      setVal(val + 1)
     }
   }
-  console.log("cartitems", cartitems)
+  // console.log("cartitems", cartitems)
 
 
   return (
