@@ -21,167 +21,145 @@ import dateFormat from 'dateformat';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
-import {cart_items, materials, count_valPlus ,count_valMinus} from '../redux/action'
+import { cart_items, materials, count_valPlus, count_valMinus } from '../redux/action'
 import { Navigate } from 'react-router-dom';
-
 const DATA = data.data
 const ExpandMore = styled((props) => {
-    const { expand, ...other } = props;
-    return <IconButton {...other} />;
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
 })(({ theme, expand }) => ({
-    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest,
-    }),
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
 }));
-
 const Showrobot = () => {
-    const dispatch = useDispatch()
-    const cartitems = useSelector(state => state.cartItem)
-    const robo_material = useSelector(state => state.material)
-    const [expanded, setExpanded] = React.useState(false);
-    const { id } = useParams()
-    const [count, setCount] = useState(0)
-    const [view, setView] = useState('')
-    const [nvigate, setNavigate] = useState()
-
-    const selected_robot = (DATA[id])
-
-    const Plus = () => {
-        if (selected_robot.stock !=0 && count!= selected_robot.stock )
-        {
-            setCount(count + 1)
-            if (robo_material.length<=5)
-            {
-                dispatch(cart_items(selected_robot))
-                dispatch (count_valPlus())
-            }
-            else{
-                alert("cannot add more than 5 items")
-            }
-        }
-        else{
-            alert("Product is out of stock ")
-        }
+  const dispatch = useDispatch()
+  const cartitems = useSelector(state => state.cartItem)
+  const robo_material = useSelector(state => state.material)
+  const [expanded, setExpanded] = React.useState(false);
+  const { id } = useParams()
+  const [count, setCount] = useState(0)
+  const [view, setView] = useState('')
+  const [nvigate, setNavigate] = useState()
+  const selected_robot = (DATA[id])
+  const Plus = () => {
+    if (selected_robot.stock != 0 && count != selected_robot.stock) {
+      setCount(count + 1)
+      if (robo_material.length <= 5) {
+        dispatch(cart_items(selected_robot))
+        dispatch(count_valPlus())
+      }
+      else {
+        alert("cannot add more than 5 items")
+      }
     }
-    const Minus = () => {
-        if (count>1)
-        {
-            setCount(count - 1)
-            dispatch(count_valMinus())
-        }
+    else {
+      alert("Product is out of stock ")
     }
-    const buy_robot = () => {
-        dispatch(materials(selected_robot.material))
-        setNavigate(true)
+  }
+  const Minus = () => {
+    if (count > 1) {
+      setCount(count - 1)
+      dispatch(count_valMinus())
     }
-    
-    const show = (e) => {
-        if (selected_robot.stock == 0) {
-            alert("This product is out of stock ")
-            setView('')
-        }
-        else {
-            setView(true)
-        }
+  }
+  const buy_robot = () => {
+    dispatch(materials(selected_robot.material))
+    setNavigate(true)
+  }
+  const show = (e) => {
+    if (selected_robot.stock == 0) {
+      alert("This product is out of stock ")
+      setView('')
     }
+    else {
+      setView(true)
+    }
+  }
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+    setView('')
+  };
+  return (
+    <Card sx={{ maxWidth: 345 }} style={{ margin: "auto", marginTop: "50px" }} >
+      {nvigate && <Navigate to={`/cart`} />}
+      <CardHeader
+        avatar={
+          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+            {selected_robot.name[0]}
+          </Avatar>
+        }
+        action={
+          <IconButton aria-label="settings">
+            <MoreVertIcon />
+          </IconButton>
+        }
+        title={selected_robot.name}
+        subheader={dateFormat(selected_robot.createdAt, 'dd/mm/yyyy')}
+      />
+      <CardMedia
+        component="img"
+        height="194"
+        image={selected_robot.image}
+        alt="Paella dish"
+      />
+      <CardContent>
+        <Typography variant="body2" color="text.secondary">
+          This impressive paella is a perfect party dish and a fun meal to cook
+          together with your guests. Add 1 cup of frozen peas along with the mussels,
+          if you like.
+        </Typography>
+      </CardContent>
+      <CardActions disableSpacing>
+        <IconButton aria-label="add to favorites">
+          <FavoriteIcon />
+        </IconButton>
+        <IconButton aria-label="share">
+          <ShareIcon />
+        </IconButton>
+        <ExpandMore
+          expand={expanded}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label="show more"
+        >
+          <ExpandMoreIcon />
+        </ExpandMore>
+      </CardActions>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent>
+          <Typography paragraph>Method:</Typography>
+          <Typography paragraph>
+            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
+            aside for 10 minutes.
+          </Typography>
+          <Typography paragraph>
+            Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over
+            .
+          </Typography>
+          <Typography paragraph>
+            Add rice and stir very gently to distribute. Top with artichokes and
 
-    console.log(robo_material)
-    console.log(cartitems)
-
-
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-        setView('')
-    };
-    return (
-
-        <Card sx={{ maxWidth: 345 }} style={{ margin: "auto", marginTop: "50px" }} >
-            {nvigate && <Navigate to={`/cart`} />}
-            <CardHeader
-                avatar={
-                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                        {selected_robot.name[0]}
-                    </Avatar>
-                }
-                action={
-                    <IconButton aria-label="settings">
-                        <MoreVertIcon />
-                    </IconButton>
-                }
-                title={selected_robot.name}
-                subheader={dateFormat(selected_robot.createdAt, 'dd/mm/yyyy')}
-            />
-            <CardMedia
-                component="img"
-                height="194"
-                image={selected_robot.image}
-                alt="Paella dish"
-            />
-            <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                    This impressive paella is a perfect party dish and a fun meal to cook
-                    together with your guests. Add 1 cup of frozen peas along with the mussels,
-                    if you like.
-                </Typography>
-            </CardContent>
-            <CardActions disableSpacing>
-                <IconButton aria-label="add to favorites">
-                    <FavoriteIcon />
-                </IconButton>
-                <IconButton aria-label="share">
-                    <ShareIcon />
-                </IconButton>
-                <ExpandMore
-                    expand={expanded}
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
-                    aria-label="show more"
-                >
-                    <ExpandMoreIcon />
-                </ExpandMore>
-            </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent>
-                    <Typography paragraph>Method:</Typography>
-                    <Typography paragraph>
-                        Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
-                        aside for 10 minutes.
-                    </Typography>
-                    <Typography paragraph>
-                        Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over
-                        .
-                    </Typography>
-                    <Typography paragraph>
-                        Add rice and stir very gently to distribute. Top with artichokes and
-
-                    </Typography>
-                    <Typography>
-                        Set aside off of the heat to let rest for 10 minutes, and then serve.
-                    </Typography>
-                </CardContent>
-            </Collapse>
-
-
-
-            <label htmlFor="icon-button-file" style={{ margin: "auto", marginBottom: "20px" }} >
-                {view ? <div>
-                    <Button variant="contained" onClick={Minus}>-</Button>
-                    <span style={{ margin: "3px 3px 3px 3px" }}> {count} </span>
-                    <Button variant="contained" onClick={Plus} >+ </Button>
-
-                    {/* <Link to={`/cart/${id}/${count}`} style={{ textDecoration: 'none' }} > */}
-                    {selected_robot.stock == 0 ?
-                        <div> out of stock...!</div> :
-                        <Button variant="contained" color="success" style={{ margin: "4px 4px 4px 4px" }} onClick={buy_robot}>Buy</Button>}
-                    {/* </Link> */}
-                </div> : ''}
-                {!view && <Button variant="contained" color="success" style={{ margin: "4px 4px 4px 4px" }} onClick={show} > Add to cart </Button>}
-                {/* <Button variant="contained" color="success" style={{ margin: "4px 4px 4px 4px" }} onClick={show} > Add to cart </Button> */}
-
-            </label>
-        </Card>
-    );
+          </Typography>
+          <Typography>
+            Set aside off of the heat to let rest for 10 minutes, and then serve.
+          </Typography>
+        </CardContent>
+      </Collapse>
+      <label htmlFor="icon-button-file" style={{ margin: "auto", marginBottom: "20px" }} >
+        {view ? <div>
+          <Button variant="contained" onClick={Minus}>-</Button>
+          <span style={{ margin: "3px 3px 3px 3px" }}> {count} </span>
+          <Button variant="contained" onClick={Plus} >+ </Button>
+          {selected_robot.stock == 0 ?
+            <div> out of stock...!</div> :
+            <Button variant="contained" color="success" style={{ margin: "4px 4px 4px 4px" }} onClick={buy_robot}>Buy</Button>}
+        </div> : ''}
+        {!view && <Button variant="contained" color="success" style={{ margin: "4px 4px 4px 4px" }} onClick={show} > Add to cart </Button>}
+      </label>
+    </Card>
+  );
 }
 export default Showrobot

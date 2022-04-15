@@ -10,14 +10,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { useSelector, useDispatch } from 'react-redux';
 import { material_type, show_all_robots } from '../redux/action'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import data from '../data.json'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Badge from '@mui/material/Badge';
-
-
-
-
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -32,7 +28,6 @@ const Search = styled('div')(({ theme }) => ({
     width: 'auto',
   },
 }));
-
 const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: '100%',
@@ -42,12 +37,10 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
 }));
-
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -59,12 +52,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-
 export default function Navbar() {
   const dispatch = useDispatch(data.data)
   const rdx_data = useSelector(state => state.robots)
-  const counter  = useSelector (state => state.counter)
-
+  const counter = useSelector(state => state.counter)
   const searchval = (e) => {
     const srch = e.target.value;
     if (srch === "" || srch.length <= 3) {
@@ -74,9 +65,6 @@ export default function Navbar() {
       dispatch(material_type(result));
     }
   }
-
-
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -98,7 +86,6 @@ export default function Navbar() {
           >
             MUI
           </Typography>
-
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -108,13 +95,12 @@ export default function Navbar() {
               inputProps={{ 'aria-label': 'search' }}
               onChange={searchval}
             />
-
           </Search>
           <IconButton style={{ color: "white" }} badgeContent={4} aria-label="add to shopping cart">
-         <Link to="/cart"> 
-          <Badge badgeContent={counter} style={{ color: "white" }} color="primary">
-              <AddShoppingCartIcon style={{ color: "white" }} color="action" />
-            </Badge>
+            <Link to="/cart">
+              <Badge badgeContent={counter} style={{ color: "white" }} color="primary">
+                <AddShoppingCartIcon style={{ color: "white" }} color="action" />
+              </Badge>
             </Link>
           </IconButton>
         </Toolbar>

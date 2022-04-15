@@ -12,9 +12,6 @@ import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 import { clear_cart } from '../redux/action';
 import { cart_item_plus, cart_item_minus } from '../redux/action'
-
-
-
 const StyledPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -22,10 +19,6 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   maxWidth: 400,
   color: theme.palette.text.primary,
 }));
-
-const message = `Truncation should be conditionally applicable on this long line of text
- as this is a much longer line than what the container can support. `;
-
 const DATA = data.data
 export default function RecipeReviewCard() {
   const dispatch = useDispatch()
@@ -34,8 +27,6 @@ export default function RecipeReviewCard() {
   const robots = useSelector(state => state.robots)
   const [data, setData] = useState([])
   const [val, setVal] = useState('0')
-
-
   const getCount = () => {
     let count = 0
     let countData = [...cartitems.reduce((mp, o) => {
@@ -45,40 +36,26 @@ export default function RecipeReviewCard() {
     }, new Map).values()];
     return countData
   }
-
   useEffect(() => {
     const datas = getCount()
     setData(datas)
-    console.log("effff", data)
   }, [val, cartitems])
-
-  // console.log(data)
-  // adding total price of all product in carts
   const addprice = data.map((items) => items.count * items.price)
   var totalamount = 0
   for (let i = 0; i < addprice.length; i++) {
     totalamount = totalamount + addprice[i]
   }
   var thai = new Intl.NumberFormat('th', { style: 'currency', currency: 'THB' }).format(totalamount).replace(/\b(\w*THB\w*)\b/, '฿ ')
-
-
   const Plus = (name) => {
     const filtered = cartitems.filter((items) => items.name == name)
-    console.log(filtered[0].stock)
     var check_stock = robots.filter((item) => item.name === name)
-    console.log(check_stock[0].stock)
-
     var buy_count = data.filter((item) => item.name == name)
-    console.log(buy_count[0].count)
     if (check_stock[0].stock !== buy_count[0].count) {
       dispatch(cart_item_plus(filtered[0]))
       setVal(val + 1)
     }
-    else {
-      alert('out of stock ')
-    }
+    else { alert('out of stock ') }
   }
-
   const Minus = (name) => {
     const check = cartitems.filter((items) => items === name)
     if (check) {
@@ -87,12 +64,8 @@ export default function RecipeReviewCard() {
       setVal(val + 1)
     }
   }
-  // console.log("cartitems", cartitems)
-
-
   return (
     <>
-
       <Box sx={{ flexGrow: 1, overflow: 'hidden', px: 3 }}>
         <StyledPaper
           sx={{
@@ -140,8 +113,6 @@ export default function RecipeReviewCard() {
           </>
         )
       })}
-
-
       {cartitems.length < 0 ? '' : <Box sx={{ flexGrow: 1, overflow: 'hidden', px: 3 }}>
         <StyledPaper
           sx={{
@@ -160,12 +131,9 @@ export default function RecipeReviewCard() {
           </Grid>
         </StyledPaper>
       </Box>}
-
       {data.length <= 0 ? <Stack sx={{ width: '100%', width: "80%", margin: "auto", marginTop: '50px' }} spacing={2}>
         <Alert severity="error">No Item in cart....! </Alert>
       </Stack> : ''}
-
     </>
   );
-
 }

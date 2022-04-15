@@ -7,16 +7,11 @@ import data from '../data.json'
 import dateFormat from 'dateformat'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import { useState } from 'react';
 import { Link } from 'react-router-dom'
-import { show_all_robots } from '../redux/action'
+import { show_all_robots } from '../redux/action';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Alert from '@mui/material/Alert';
-
-
-
-
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -24,26 +19,18 @@ const Item = styled(Paper)(({ theme }) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
 }));
-
 const Input = styled('input')({
     display: 'none',
 });
-
-
 export default function ResponsiveGrid() {
     const dispatch = useDispatch()
     const rdx_data = useSelector(state => state.robots)
     const DATA = data.data
-    // console.log(DATA)
     useEffect(() => {
         dispatch(show_all_robots(DATA))
     }, [])
-    // console.log(rdx_data)
-
-
     return (
         <div >
-
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                     {rdx_data.map((value, index) => {
@@ -56,24 +43,17 @@ export default function ResponsiveGrid() {
                                 <Item style={{ margin: "25px" }}><h8> Date :  {dateFormat(value.createdAt, 'dd/mm/yyyy')}</h8></Item>
                                 <Item style={{ margin: "25px" }}><h8> Material : {value.material}</h8></Item>
                                 <Stack direction="row" alignItems="center" spacing={2}>
-
                                     <Link to={`/showrobot/${index}`} style={{ textDecoration: 'none' }} >
                                         <Button variant="contained" color="success" style={{ marginLeft: "170px", marginBottom: "10px", textDecoration: "none" }}> view </Button>
                                     </Link>
-
                                 </Stack>
                             </Grid>
-
                         </>)
-
                     })}
-                    {rdx_data.length == 0 ? <Stack sx={{ width: '100%' , width:"80%" , margin:"auto", marginTop:'50px'}} spacing={2}>
+                    {rdx_data.length == 0 ? <Stack sx={{ width: '100%', width: "80%", margin: "auto", marginTop: '50px' }} spacing={2}>
                         <Alert severity="error">No Data Found.......! Search did not match </Alert>
                     </Stack> : ''}
-
                 </Grid>
-
-
             </Box>
         </div>
     );
