@@ -21,7 +21,7 @@ import dateFormat from 'dateformat';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
-import { cart_items, materials, count_valPlus, count_valMinus } from '../redux/action'
+import { cartItems, materials, countValPlus, countValMinus } from '../redux/action'
 import { Navigate } from 'react-router-dom';
 const DATA = data.data
 const ExpandMore = styled((props) => {
@@ -36,7 +36,6 @@ const ExpandMore = styled((props) => {
 }));
 const Showrobot = () => {
   const dispatch = useDispatch()
-  const cartitems = useSelector(state => state.cartItem)
   const robo_material = useSelector(state => state.material)
   const [expanded, setExpanded] = React.useState(false);
   const { id } = useParams()
@@ -48,8 +47,8 @@ const Showrobot = () => {
     if (selected_robot.stock != 0 && count != selected_robot.stock) {
       setCount(count + 1)
       if (robo_material.length <= 5) {
-        dispatch(cart_items(selected_robot))
-        dispatch(count_valPlus())
+        dispatch(cartItems(selected_robot))
+        dispatch(countValPlus())
       }
       else {
         alert("cannot add more than 5 items")
@@ -62,7 +61,7 @@ const Showrobot = () => {
   const Minus = () => {
     if (count > 1) {
       setCount(count - 1)
-      dispatch(count_valMinus())
+      dispatch(countValMinus())
     }
   }
   const buy_robot = () => {

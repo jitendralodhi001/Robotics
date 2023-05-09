@@ -9,7 +9,7 @@ import InputBase from '@mui/material/InputBase';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { useSelector, useDispatch } from 'react-redux';
-import { material_type, show_all_robots } from '../redux/action'
+import { materialType, showAllRobots } from '../redux/action'
 import { Link } from 'react-router-dom'
 import data from '../data.json'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -54,15 +54,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 export default function Navbar() {
   const dispatch = useDispatch(data.data)
-  const rdx_data = useSelector(state => state.robots)
+  const DATA = useSelector(state => state.robots)
   const counter = useSelector(state => state.counter)
   const searchval = (e) => {
     const srch = e.target.value;
     if (srch === "" || srch.length <= 3) {
-      dispatch(show_all_robots(data.data))
+      dispatch(showAllRobots(data.data))
     } else {
-      const result = rdx_data.filter((item) => (item.material.includes(srch)) && item);
-      dispatch(material_type(result));
+      const result = DATA.filter((item) => (item.material.includes(srch)) && item);
+      dispatch(materialType(result));
     }
   }
   return (
@@ -84,7 +84,8 @@ export default function Navbar() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>  Robotics </Link>
+
           </Typography>
           <Search>
             <SearchIconWrapper>

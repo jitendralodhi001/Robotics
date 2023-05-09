@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import data from '../data.json'
 import Button from '@mui/material/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { styled } from '@mui/material/styles';
@@ -10,8 +9,8 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
-import { clear_cart } from '../redux/action';
-import { cart_item_plus, cart_item_minus } from '../redux/action'
+import { clearCart } from '../redux/action';
+import { cartItemPlus, cartItemMinus } from '../redux/action'
 const StyledPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -19,11 +18,9 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   maxWidth: 400,
   color: theme.palette.text.primary,
 }));
-const DATA = data.data
 export default function RecipeReviewCard() {
   const dispatch = useDispatch()
   const cartitems = useSelector(state => state.cartItem)
-  const same_type_robot = useSelector(state => state.sameRobot)
   const robots = useSelector(state => state.robots)
   const [data, setData] = useState([])
   const [val, setVal] = useState('0')
@@ -51,7 +48,7 @@ export default function RecipeReviewCard() {
     var check_stock = robots.filter((item) => item.name === name)
     var buy_count = data.filter((item) => item.name == name)
     if (check_stock[0].stock !== buy_count[0].count) {
-      dispatch(cart_item_plus(filtered[0]))
+      dispatch(cartItemPlus(filtered[0]))
       setVal(val + 1)
     }
     else { alert('out of stock ') }
@@ -60,7 +57,7 @@ export default function RecipeReviewCard() {
     const check = cartitems.filter((items) => items === name)
     if (check) {
       cartitems.shift()
-      dispatch(cart_item_minus(cartitems))
+      dispatch(cartItemMinus(cartitems))
       setVal(val + 1)
     }
   }
@@ -125,7 +122,7 @@ export default function RecipeReviewCard() {
               <Typography noWrap>Total Price : {thai}/- </Typography>
             </Grid>
             <Grid item xs zeroMinWidth>
-              <Button variant="outlined" onClick={() => dispatch(clear_cart())} color="error">Clear Cart</Button>
+              <Button variant="outlined" onClick={() => dispatch(clearCart())} color="error">Clear Cart</Button>
             </Grid>
 
           </Grid>

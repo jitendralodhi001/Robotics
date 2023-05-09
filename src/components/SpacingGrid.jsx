@@ -8,7 +8,7 @@ import dateFormat from 'dateformat'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { Link } from 'react-router-dom'
-import { show_all_robots } from '../redux/action';
+import { showAllRobots } from '../redux/action';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Alert from '@mui/material/Alert';
@@ -19,21 +19,18 @@ const Item = styled(Paper)(({ theme }) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
 }));
-const Input = styled('input')({
-    display: 'none',
-});
 export default function ResponsiveGrid() {
     const dispatch = useDispatch()
-    const rdx_data = useSelector(state => state.robots)
+    const StoreData = useSelector(state => state.robots)
     const DATA = data.data
     useEffect(() => {
-        dispatch(show_all_robots(DATA))
+        dispatch(showAllRobots(DATA))
     }, [])
     return (
         <div >
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                    {rdx_data.map((value, index) => {
+                    {StoreData.map((value, index) => {
                         return (<>
                             <Grid style={{ background: "#F2F3F5", border: "2px solid black", marginTop: "22px" }} item xs={2} sm={4} md={4} key={index}>
                                 <Item style={{ margin: "25px", background: "#ECF3FF", border: "2px solid black" }} ><img src={value.image}></img></Item>
@@ -50,7 +47,7 @@ export default function ResponsiveGrid() {
                             </Grid>
                         </>)
                     })}
-                    {rdx_data.length == 0 ? <Stack sx={{ width: '100%', width: "80%", margin: "auto", marginTop: '50px' }} spacing={2}>
+                    {StoreData.length == 0 ? <Stack sx={{ width: '100%', width: "80%", margin: "auto", marginTop: '50px' }} spacing={2}>
                         <Alert severity="error">No Data Found.......! Search did not match </Alert>
                     </Stack> : ''}
                 </Grid>

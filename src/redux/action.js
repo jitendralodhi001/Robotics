@@ -1,55 +1,55 @@
-export const show_all_robots = (data) => {
+export const showAllRobots = (data) => {
   return ({
-    type: "showrobots",
+    type: 'SHOW_ROBOTS',
     payload: data
   }
   )
 }
-export const material_type = (data) => {
+export const materialType = (data) => {
   return ({
-    type: "search_material",
+    type: 'SEARCH_MATERIALS',
     payload: data,
   })
 }
-export const count_valPlus = (data) => {
+export const countValPlus = (data) => {
   return ({
-    type: 'count+',
+    type: 'COUNT+',
     payload: data
   })
 }
-export const count_valMinus = (data) => {
+export const countValMinus = (data) => {
   return ({
-    type: 'count-',
+    type: 'COUNT-',
     payload: data
   })
 }
-export const cart_items = (data) => {
+export const cartItems = (data) => {
   return ({
-    type: 'cart_items',
+    type: 'CART_ITEMS',
     payload: data
   })
 }
-export const clear_cart = (data) => {
+export const clearCart = (data) => {
   return ({
-    type: 'clearcart',
+    type: 'CLEAR_CART',
     payload: data
   })
 }
 export const materials = (data) => {
   return ({
-    type: 'material',
+    type: 'MATERIALS',
     payload: data
   })
 }
-export const cart_item_plus = (data) => {
+export const cartItemPlus = (data) => {
   return ({
-    type: 'cartitemplus',
+    type: 'CART_ITEM_PLUS',
     payload: data
   })
 }
-export const cart_item_minus = (data) => {
+export const cartItemMinus = (data) => {
   return ({
-    type: 'cartitemminus',
+    type: 'CART_ITEM_MINUS',
     payload: data
   })
 }

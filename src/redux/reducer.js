@@ -1,59 +1,59 @@
-const initial_state = { robots: [], counter: 0, cartItem: [], material: [], sameRobot: [] }
-export const Reducer = (state = initial_state, action) => {
+const initialState = { robots: [], counter: 0, cartItem: [], material: [], sameRobot: [] }
+export const Reducer = (state = initialState, action) => {
     switch (action.type) {
-        case 'showrobots':
+        case 'SHOW_ROBOTS':
             return ({
                 ...state,
                 robots: action.payload
             })
-        case 'search_material':
+        case 'SEARCH_MATERIALS':
             return ({
                 ...state,
                 robots: action.payload
             })
-        case 'count+':
+        case 'COUNT+':
             return ({
                 ...state,
                 counter: state.counter + 1
             })
-        case 'count-':
+        case 'COUNT-':
             return ({
                 ...state,
                 counter: state.counter - 1
             })
-        case 'cart_items':
+        case 'CART_ITEMS':
             return ({
                 ...state,
                 cartItem: [...state.cartItem, action.payload]
             })
-        case 'clearcart':
+        case 'CLEAR_CART':
             return ({
                 ...state,
                 cartItem: [],
                 counter: 0
             })
-        case 'removeitem':
+        case 'REMOVE_ITEMS':
             return ({
                 ...state,
                 cartItem: [action.payload]
             })
-        case 'material':
+        case 'MATERIALS':
             return ({
                 ...state,
                 material: [...state.material, action.payload]
             })
-        case 'cartitemplus':
+        case 'CART_ITEM_PLUS':
             return ({
                 ...state,
                 cartItem: [...state.cartItem, action.payload],
                 counter: state.counter + 1
             })
-        case 'cartitemminus':
+        case 'CART_ITEM_MINUS':
             return ({
                 ...state,
                 cartItem: action.payload,
                 counter: state.counter - 1
             })
-        default: return (initial_state)
+        default: return (initialState)
     }
 }
